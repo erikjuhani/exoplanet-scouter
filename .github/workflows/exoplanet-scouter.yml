@@ -15,7 +15,7 @@ jobs:
           - name: Build docker image
             run: |
                 docker build --file Dockerfile.prod -t exoscout .
-                docker save -o exescout-image exoscout
+                docker save -o exoscout-image exoscout
 
           - name: Transfer docker image 
             uses: appleboy/scp-action@master
