@@ -1,0 +1,17 @@
+FROM node:lts-alpine as node_base
+
+FROM node_base as dependencies
+WORKDIR /deps
+COPY package.json yarn.lock /deps/
+RUN yarn install
+
+FROM node_base as build
+COPY --from=dependencies /deps /build
+WORKDIR /build
+COPY . /build
+RUN yarn build
+
+FROM node_base as runner
+COPY --from=build /build /
+WORKDIR /dist
+CMD ["node", "main.js"]
