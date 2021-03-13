@@ -6,24 +6,24 @@ export type Planet = {
   controversial: boolean;
   yearOfDiscovery: number;
   updatedAt: string;
-  potentiallyHabitable: boolean;
+  potentiallyHabitable?: boolean;
   star: Star;
-  distance?: number;
-  mass?: number;
-  radius?: number;
-  density?: number;
-  orbitalPeriod?: number;
-  orbitSemiMajorAxis?: number;
+  distance?: Nullable<number>;
+  mass?: Nullable<number>;
+  radius?: Nullable<number>;
+  density?: Nullable<number>;
+  orbitalPeriod?: Nullable<number>;
+  orbitSemiMajorAxis?: Nullable<number>;
 };
 
 export type Star = {
   name: string;
   orbitingPlanets: number;
-  mass?: number;
-  age?: number;
-  radius?: number;
-  temperature?: number;
-  distance?: number;
-  hdName?: string;
-  hipName?: string;
+  mass?: Nullable<number>;
+  age?: Nullable<number>;
+  radius?: Nullable<number>;
+  temperature?: Nullable<number>;
+  distance?: Nullable<number>;
+  hdName?: Nullable<string>;
+  hipName?: Nullable<string>;
 };

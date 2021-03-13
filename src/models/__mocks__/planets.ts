@@ -5,6 +5,11 @@ export const proximaCen: Star = {
   orbitingPlanets: 1,
   radius: 0.14,
   temperature: 3050,
+  age: null,
+  distance: 1.3,
+  hdName: null,
+  mass: 0.12,
+  hipName: "HIP 70890",
 };
 
 export const proximaCenB: Planet = {
@@ -15,6 +20,11 @@ export const proximaCenB: Planet = {
   updatedAt: "2016-08-25",
   star: proximaCen,
   orbitSemiMajorAxis: 0.0485,
+  distance: 1.3,
+  density: null,
+  mass: null,
+  orbitalPeriod: 11.186,
+  radius: null,
 };
 
 export const gj411: Star = {
@@ -32,6 +42,7 @@ export const gj411b: Planet = {
   updatedAt: "2021-03-04",
   star: gj411,
   orbitSemiMajorAxis: 0.0789,
+  distance: 2.55,
 };
 
 export const tauCet: Star = {
@@ -47,6 +58,7 @@ export const tauCetg: Planet = {
   updatedAt: "2017-08-17",
   star: tauCet,
   orbitSemiMajorAxis: 0.133,
+  distance: 3.6,
 };
 
 export const hd219134: Star = {
@@ -62,6 +74,7 @@ export const hd219134f: Planet = {
   updatedAt: "2017-03-16",
   star: hd219134,
   orbitSemiMajorAxis: 0.1463,
+  distance: 6.53,
 };
 
 export const trappist1: Star = {
@@ -79,4 +92,5 @@ export const trappist1d: Planet = {
   updatedAt: "2017-02-22",
   star: trappist1,
   orbitSemiMajorAxis: 0.02144,
+  distance: 12.43,
 };

@@ -17,7 +17,6 @@ export const createResponseTransformer = (): ResponseTransformer => ({
     controversial: !!data.pl_controvflag,
     yearOfDiscovery: data.pl_disc,
     updatedAt: data.rowupdate,
-    potentiallyHabitable: false,
     star: {
       name: data.pl_hostname,
       hdName: data.hd_name,

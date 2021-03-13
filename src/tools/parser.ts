@@ -30,7 +30,7 @@ export const createKelvinParser = (
         case TemperatureUnit.Celsius:
           return kelvin - 273.15;
         case TemperatureUnit.Fahrenheit:
-          return kelvin * (9 / 5) - 459.67;
+          return Math.round(kelvin * (9 / 5) - 459.67);
         default:
           return kelvin;
       }
