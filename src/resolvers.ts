@@ -7,7 +7,7 @@ import {
   SortOrder,
   TemperatureUnit,
 } from "./tools";
-import { Planet, Star } from "./types";
+import { Nullable, Planet, Star } from "./types";
 
 const exoplanets = async (
   _source: undefined,
@@ -38,7 +38,7 @@ const distance = (
   source: Planet,
   args: { unit: DistanceUnit },
   { tools }: Context
-): number | undefined => {
+): Nullable<number | undefined> => {
   const { unit } = args;
   const { createParsecParser } = tools.parsers;
 
@@ -53,7 +53,7 @@ const temperature = (
   source: Star,
   args: { unit: TemperatureUnit },
   { tools }: Context
-): number | undefined => {
+): Nullable<number | undefined> => {
   const { unit } = args;
   const { createKelvinParser } = tools.parsers;
 
