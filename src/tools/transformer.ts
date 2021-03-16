@@ -27,6 +27,10 @@ export const createResponseTransformer = (): ResponseTransformer => ({
       mass: data.st_mass,
       radius: data.st_rad,
       temperature: data.st_teff,
+      coordinates: {
+        longitude: data.st_glon,
+        latitude: data.st_glat,
+      },
     },
   }),
 });

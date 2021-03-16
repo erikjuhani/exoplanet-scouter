@@ -1,13 +1,15 @@
 import { ApolloError } from "apollo-server-errors";
+import { IResolvers } from "graphql-tools";
 import { Context } from "./context";
 import {
+  CoordinateUnit,
   DistanceUnit,
   FilterCriteria,
   SortMethod,
   SortOrder,
   TemperatureUnit,
 } from "./tools";
-import { Nullable, Planet, Star } from "./types";
+import { LatLng, Nullable, Planet, Star, XYZ } from "./types";
 
 const exoplanets = async (
   _source: undefined,
@@ -66,7 +68,33 @@ const temperature = (
   return source.temperature;
 };
 
-export const resolvers = {
+const coordinates = (
+  source: Star,
+  args: { unit: CoordinateUnit },
+  { tools }: Context
+): LatLng | XYZ => {
+  const { unit } = args;
+  const { createLatLngParser } = tools.parsers;
+
+  if (source.distance) {
+    return createLatLngParser()
+      .setConversionUnit(unit)
+      .parse(source.distance, source.coordinates as LatLng);
+  }
+
+  return source.coordinates;
+};
+
+export const resolvers: IResolvers = {
+  Coordinate: {
+    __resolveType: (obj: LatLng | XYZ): string => {
+      if ("latitude" in obj) {
+        return "LatLng";
+      }
+
+      return "XYZ";
+    },
+  },
   Query: {
     exoplanets,
   },
@@ -75,5 +103,6 @@ export const resolvers = {
   },
   Star: {
     temperature,
+    coordinates,
   },
 };

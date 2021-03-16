@@ -1,5 +1,8 @@
+import { proximaCen } from "../models/__mocks__/planets";
 import {
+  CoordinateUnit,
   createKelvinParser,
+  createLatLngParser,
   createParsecParser,
   DistanceUnit,
   TemperatureUnit,
@@ -30,5 +33,18 @@ describe("KelvinParser", () => {
     expect(createKelvinParser().setConversionUnit(unit).parse(kelvin)).toEqual(
       expected
     );
+  });
+});
+
+describe("LatLngParser", () => {
+  test.each`
+    args                                             | unit                     | expected
+    ${[proximaCen.distance, proximaCen.coordinates]} | ${undefined}             | ${proximaCen.coordinates}
+    ${[proximaCen.distance, proximaCen.coordinates]} | ${CoordinateUnit.LatLng} | ${proximaCen.coordinates}
+    ${[proximaCen.distance, proximaCen.coordinates]} | ${CoordinateUnit.XYZ}    | ${{ x: 0.9015639317657103, y: -0.9355594051126915, z: -0.043715860329410584 }}
+  `("", ({ args, unit, expected }) => {
+    expect(
+      createLatLngParser().setConversionUnit(unit).parse(args[0], args[1])
+    ).toEqual(expected);
   });
 });

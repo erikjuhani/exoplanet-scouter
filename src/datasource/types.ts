@@ -16,6 +16,8 @@ export type PlanetJSON = {
 export type StarJSON = {
   pl_pnum: number;
   pl_hostname: string;
+  st_glon: number;
+  st_glat: number;
   hd_name: Nullable<string>;
   hip_name: Nullable<string>;
   st_teff: Nullable<number>;
@@ -43,6 +45,8 @@ export const starColumns = Array.from<keyof StarJSON>([
   "st_mass",
   "st_rad",
   "st_age",
+  "st_glon",
+  "st_glat",
   "pl_pnum",
   "hd_name",
   "hip_name",

@@ -16,9 +16,21 @@ export type Planet = {
   orbitSemiMajorAxis?: Nullable<number>;
 };
 
+export type LatLng = {
+  longitude: number;
+  latitude: number;
+};
+
+export type XYZ = {
+  x: number;
+  y: number;
+  z: number;
+};
+
 export type Star = {
   name: string;
   orbitingPlanets: number;
+  coordinates: LatLng | XYZ;
   mass?: Nullable<number>;
   age?: Nullable<number>;
   radius?: Nullable<number>;

@@ -10,6 +10,9 @@ import {
   ParsecParser,
   KelvinParser,
   createKelvinParser,
+  createLatLngParser,
+  CoordinateUnit,
+  LatLngParser,
 } from "./parser";
 import { createSort, Sort, SortMethod } from "./sort";
 import { createResponseTransformer, ResponseTransformer } from "./transformer";
@@ -30,8 +33,9 @@ export type Tools = {
     createHabitableZoneClassifier: () => HabitableZoneClassifier;
   };
   parsers: {
-    createParsecParser: (distanceUnit?: DistanceUnit) => ParsecParser;
-    createKelvinParser: (temperatureUnit?: TemperatureUnit) => KelvinParser;
+    createParsecParser: (unit?: DistanceUnit) => ParsecParser;
+    createKelvinParser: (unit?: TemperatureUnit) => KelvinParser;
+    createLatLngParser: (unit?: CoordinateUnit) => LatLngParser;
   };
 };
 
@@ -47,5 +51,6 @@ export const tools: Tools = {
   parsers: {
     createParsecParser,
     createKelvinParser,
+    createLatLngParser,
   },
 };

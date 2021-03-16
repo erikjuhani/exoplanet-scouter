@@ -16,6 +16,13 @@ const temperatureUnit = `
   }
 `;
 
+const coordinateUnit = `
+  enum CoordinateUnit {
+    LAT_LNG
+    XYZ
+  }
+`;
+
 const filterMethod = `
   enum FilterCriteria {
     ONLY_NON_CONTROVERSIAL
@@ -52,7 +59,24 @@ const exoplanet = `
   }
 `;
 
+const latLng = `
+  type LatLng {
+    longitude: Float!
+    latitude: Float!
+  }
+`;
+
+const xyz = `
+  type XYZ {
+    x: Float!
+    y: Float!
+    z: Float!
+  }
+`;
+
 const star = `
+  union Coordinate = LatLng | XYZ
+
   type Star {
     name: String!
     orbitingPlanets: Int!
@@ -62,6 +86,7 @@ const star = `
     age: Float
     mass: Float
     radius: Float
+    coordinates(unit: CoordinateUnit = LAT_LNG): Coordinate
     temperature(unit: TemperatureUnit = KELVIN): Float
   }
 `;
@@ -77,6 +102,9 @@ const exoplanetQuery = `
 export const typeDefs = gql`
   ${distanceUnit}
   ${temperatureUnit}
+  ${coordinateUnit}
+  ${latLng}
+  ${xyz}
   ${filterMethod}
   ${sortMethod}
   ${order}

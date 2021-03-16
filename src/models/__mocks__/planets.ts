@@ -10,6 +10,10 @@ export const proximaCen: Star = {
   hdName: null,
   mass: 0.12,
   hipName: "HIP 70890",
+  coordinates: {
+    latitude: -1.927082,
+    longitude: 313.939878,
+  },
 };
 
 export const proximaCenB: Planet = {
@@ -32,6 +36,11 @@ export const gj411: Star = {
   orbitingPlanets: 1,
   radius: 0.39,
   temperature: 3601,
+  distance: 2.55,
+  coordinates: {
+    latitude: 65.431612,
+    longitude: 185.118536,
+  },
 };
 
 export const gj411b: Planet = {
@@ -48,6 +57,11 @@ export const gj411b: Planet = {
 export const tauCet: Star = {
   name: "tau Cet",
   orbitingPlanets: 4,
+  distance: 3.6,
+  coordinates: {
+    latitude: -73.439747,
+    longitude: 173.100761,
+  },
 };
 
 export const tauCetg: Planet = {
@@ -64,6 +78,11 @@ export const tauCetg: Planet = {
 export const hd219134: Star = {
   name: "HD 219134",
   orbitingPlanets: 6,
+  distance: 6.53,
+  coordinates: {
+    latitude: -3.19852,
+    longitude: 109.89845,
+  },
 };
 
 export const hd219134f: Planet = {
@@ -82,6 +101,11 @@ export const trappist1: Star = {
   orbitingPlanets: 7,
   temperature: 2559,
   radius: 0.12,
+  distance: 12.43,
+  coordinates: {
+    latitude: -56.644239,
+    longitude: 69.71242,
+  },
 };
 
 export const trappist1d: Planet = {

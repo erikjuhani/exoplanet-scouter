@@ -17,6 +17,8 @@ export const proximaCenResponse = JSON.parse(`
     "st_age":null,
     "pl_pnum":1,
     "hd_name":null,
-    "hip_name":"HIP 70890"
+    "hip_name":"HIP 70890",
+    "st_glat": -1.927082,
+    "st_glon": 313.939878
   }
 `);
