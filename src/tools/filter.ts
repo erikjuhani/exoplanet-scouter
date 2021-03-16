@@ -1,7 +1,7 @@
 import { Planet } from "../types";
 
 export enum FilterCriteria {
-  OnlyNonContoversial = "ONLY_NON_CONTROVERSIAL",
+  OnlyNonControversial = "ONLY_NON_CONTROVERSIAL",
   PotentiallyHabitable = "POTENTIALLY_HABITABLE",
 }
 
@@ -27,7 +27,7 @@ export const createFilter = (criteria?: FilterCriteria): Filter => {
         case FilterCriteria.PotentiallyHabitable:
           key = "potentiallyHabitable";
           break;
-        case FilterCriteria.OnlyNonContoversial:
+        case FilterCriteria.OnlyNonControversial:
           key = "controversial";
           break;
       }
