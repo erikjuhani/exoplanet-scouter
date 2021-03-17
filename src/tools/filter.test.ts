@@ -13,7 +13,7 @@ describe("Filter", () => {
   test.each`
     criteria                               | negate   | expected
     ${FilterCriteria.PotentiallyHabitable} | ${false} | ${[proximaCenB]}
-    ${FilterCriteria.OnlyNonContoversial}  | ${true}  | ${[proximaCenB, gj411b, tauCetg]}
+    ${FilterCriteria.OnlyNonControversial} | ${true}  | ${[proximaCenB, gj411b, tauCetg]}
   `("evaluate", ({ criteria, negate, expected }) => {
     let actual: Planet[] = [];
     if (negate) {
