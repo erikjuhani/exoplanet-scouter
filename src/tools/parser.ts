@@ -1,5 +1,10 @@
-import { LatLng, Planet, Star, XYZ } from "../types";
+import { LatLng, XYZ } from "../types";
 import { MathUtil } from "./math";
+
+// TODO: Separate other parse functions from parsers see: csvStringParse().
+// TODO: Use the generic ParserFactory instead, to create Parsers.
+// TODO: Move Unit enums to types file.
+// TODO: Create parsers directory and move/use explicit file names for each parser. e.g. `parser/parsec.ts`
 
 export enum DistanceUnit {
   Parsec = "PARSEC",
@@ -37,7 +42,7 @@ export const createKelvinParser = (
       parser.conversionUnit = conversionUnit;
       return parser;
     },
-    parse: (kelvin: number) => {
+    parse: (kelvin: number): number => {
       switch (parser.conversionUnit) {
         case TemperatureUnit.Celsius:
           return kelvin - 273.15;
@@ -63,7 +68,7 @@ export const createParsecParser = (
       parser.conversionUnit = conversionUnit;
       return parser;
     },
-    parse: (parsec: number) => {
+    parse: (parsec: number): number => {
       switch (parser.conversionUnit) {
         case DistanceUnit.Km:
           return parsec * 3.08567758 ** 13;
@@ -88,7 +93,6 @@ export type LatLngParser = Parser<
   LatLng | XYZ
 >;
 
-// TODO: Use factory instead.
 export const ParserFactory = <T, U>(defaultUnit: T, parse: ParseFn<U>) => (
   unit?: T
 ): Parser<T, U> => {
@@ -137,4 +141,48 @@ export const createLatLngParser = (
   };
 
   return parser;
+};
+
+export const csvStringParse = <
+  Output extends Record<string, string | number | null>
+>(
+  csv: string
+): Output[] => {
+  const delimiter = ",";
+  const linebreak = "\n";
+
+  const parseCellValue = (cellValue: string) => {
+    if (!cellValue.length) {
+      return null;
+    }
+
+    const value = parseFloat(cellValue);
+    if (isNaN(value)) {
+      // Not a numerical value.
+      // Remove double quotes if present.
+      return cellValue.replace(/"/g, "");
+    }
+
+    return value;
+  };
+
+  const rawRows = csv.trim().split(linebreak);
+  const rows = rawRows.map((rawRow: string) =>
+    rawRow.split(delimiter).map(parseCellValue)
+  );
+
+  // Header cell values are always present.
+  const header = rows.shift()?.map((row) => row as string);
+
+  if (!header) {
+    return [];
+  }
+
+  const objData = rows.map((row) => {
+    return row.reduce((obj, cell, i) => {
+      return { ...obj, [header[i]]: cell };
+    }, {});
+  });
+
+  return objData as Output[];
 };

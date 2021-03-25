@@ -1,9 +1,14 @@
+import {
+  proximaCenResponse,
+  proximaCenCSVResponse,
+} from "../datasource/__mocks__/response";
 import { proximaCen } from "../models/__mocks__/planets";
 import {
   CoordinateUnit,
   createKelvinParser,
   createLatLngParser,
   createParsecParser,
+  csvStringParse,
   DistanceUnit,
   TemperatureUnit,
 } from "./parser";
@@ -41,10 +46,19 @@ describe("LatLngParser", () => {
     args                                             | unit                     | expected
     ${[proximaCen.distance, proximaCen.coordinates]} | ${undefined}             | ${proximaCen.coordinates}
     ${[proximaCen.distance, proximaCen.coordinates]} | ${CoordinateUnit.LatLng} | ${proximaCen.coordinates}
-    ${[proximaCen.distance, proximaCen.coordinates]} | ${CoordinateUnit.XYZ}    | ${{ x: 0.9015639317657103, y: -0.9355594051126915, z: -0.043715860329410584 }}
+    ${[proximaCen.distance, proximaCen.coordinates]} | ${CoordinateUnit.XYZ}    | ${{ x: 0.9023895250918642, y: -0.9364154096631991, z: -0.04375776102342627 }}
   `("", ({ args, unit, expected }) => {
     expect(
       createLatLngParser().setConversionUnit(unit).parse(args[0], args[1])
     ).toEqual(expected);
+  });
+});
+
+describe("csvStringParse", () => {
+  test.each`
+    csvString                | expected
+    ${proximaCenCSVResponse} | ${[proximaCenResponse]}
+  `("", ({ csvString, expected }) => {
+    expect(csvStringParse(csvString)).toEqual(expected);
   });
 });

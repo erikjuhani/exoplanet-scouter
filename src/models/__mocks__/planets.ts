@@ -6,13 +6,11 @@ export const proximaCen: Star = {
   radius: 0.14,
   temperature: 3050,
   age: null,
-  distance: 1.3,
-  hdName: null,
+  distance: 1.30119,
   mass: 0.12,
-  hipName: "HIP 70890",
   coordinates: {
-    latitude: -1.927082,
-    longitude: 313.939878,
+    latitude: -1.927165,
+    longitude: 313.9399,
   },
 };
 
@@ -24,7 +22,7 @@ export const proximaCenB: Planet = {
   updatedAt: "2016-08-25",
   star: proximaCen,
   orbitSemiMajorAxis: 0.0485,
-  distance: 1.3,
+  distance: 1.30119,
   density: null,
   mass: null,
   orbitalPeriod: 11.186,

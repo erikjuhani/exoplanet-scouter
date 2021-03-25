@@ -1,24 +1,28 @@
 export const proximaCenResponse = JSON.parse(`
   {
     "pl_name":"Proxima Cen b",
-    "st_dist":1.30,
-    "pl_controvflag":0,
-    "pl_disc":2016,
+    "sy_dist":1.30119,
+    "pl_controv_flag":0,
+    "disc_year":2016,
     "pl_bmassj":0.00400,
     "pl_orbsmax":0.048500,
     "pl_orbper":11.18600000,
     "pl_radj":null,
     "pl_dens":null,
+    "releasedate": "2016-08-25",
     "rowupdate":"2016-08-25",
-    "pl_hostname":"Proxima Cen",
+    "hostname":"Proxima Cen",
     "st_teff":3050.00,
     "st_mass":0.12,
     "st_rad":0.14,
     "st_age":null,
-    "pl_pnum":1,
-    "hd_name":null,
-    "hip_name":"HIP 70890",
-    "st_glat": -1.927082,
-    "st_glon": 313.939878
+    "sy_pnum":1,
+    "glat": -1.927165,
+    "glon": 313.9399
   }
 `);
+
+export const proximaCenCSVResponse = `
+pl_name,pl_controv_flag,disc_year,pl_bmassj,pl_orbsmax,pl_orbper,pl_radj,pl_dens,rowupdate,releasedate,hostname,st_teff,st_mass,st_rad,st_age,glon,glat,sy_pnum,sy_dist
+"Proxima Cen b",0,2016,0.00400,0.048500,11.18600000,,,"2016-08-25","2016-08-25","Proxima Cen",3050.00,0.12,0.14,,313.9399000,-1.9271650,1,1.3011900
+`;

@@ -59,7 +59,7 @@ const exoplanet = `
     "Date of last update to planet parameters."
     updatedAt: String!
 
-	  """
+    """
     Distance to the planetary system in units of parsecs.
 
     Change returned distance unit by giving a DistanceUnit parameter.
