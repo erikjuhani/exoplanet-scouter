@@ -11,6 +11,7 @@ WORKDIR /build
 COPY . /build
 RUN yarn build
 
+# TODO: Use distroless container gcr.io/distroless/nodejs:14
 FROM node_base as runner
 COPY --from=build /build /
 WORKDIR /dist
