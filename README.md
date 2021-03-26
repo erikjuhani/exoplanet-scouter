@@ -12,13 +12,13 @@ You can use the "Demo" api for any purpose you like, but be aware that it might 
 I suggest to use this API locally or in self provided environments.
 
 ## Todo:
-- [] Issues and milestones for version 1
-- [] Better readme and explanations
-- [] External datasource result caching
-- [] Higher testing coverage
-- [] Github action step for testing and building the application
-- [] Clear separation of development and production packages
-- [] Development dockerfile and Makefile for easier testing and building purposes
+- [ ] Issues and milestones for version 1
+- [ ] Better readme and explanations
+- [ ] External datasource result caching
+- [ ] Higher testing coverage
+- [ ] Github action step for testing and building the application
+- [ ] Clear separation of development and production packages
+- [ ] Development dockerfile and Makefile for easier testing and building purposes
 
 ## Queries
 
