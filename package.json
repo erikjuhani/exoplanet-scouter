@@ -10,7 +10,9 @@
     "build": "tsc",
     "dev": "ts-node-dev src/index.ts",
     "lint": "eslint .",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "coverage": "yarn test --coverage",
+    "clean": "rm -r coverage && rm -r dist"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
