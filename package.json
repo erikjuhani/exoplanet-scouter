@@ -15,21 +15,21 @@
     "clean": "rm -r coverage && rm -r dist"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.20",
-    "@typescript-eslint/eslint-plugin": "^4.17.0",
-    "@typescript-eslint/parser": "^4.17.0",
-    "eslint": "^7.21.0",
+    "@types/jest": "^26.0.22",
+    "@typescript-eslint/eslint-plugin": "^4.19.0",
+    "@typescript-eslint/parser": "^4.19.0",
+    "eslint": "^7.22.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.3.1",
     "jest": "^26.6.3",
-    "ts-jest": "^26.5.3",
+    "ts-jest": "^26.5.4",
     "ts-node-dev": "^1.1.6",
     "typescript": "^4.2.3"
   },
   "dependencies": {
-    "apollo-datasource-rest": "^0.10.0",
-    "apollo-server": "^2.21.1",
+    "apollo-datasource-rest": "^0.11.0",
+    "apollo-server": "^2.22.1",
     "graphql": "^15.5.0"
   }
 }
