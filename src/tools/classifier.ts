@@ -9,7 +9,7 @@ export const createHabitableZoneClassifier = (): HabitableZoneClassifier => ({
     const { star } = planet;
 
     // We expect that the planet is not habitable.
-    planet.potentiallyHabitable = false;
+    let potentiallyHabitable = false;
 
     // Classification cannot be done if these values are not known.
     if (!planet.orbitSemiMajorAxis || !star.radius || !star.temperature) {
@@ -28,10 +28,10 @@ export const createHabitableZoneClassifier = (): HabitableZoneClassifier => ({
       planet.orbitSemiMajorAxis >= inner &&
       planet.orbitSemiMajorAxis <= outer
     ) {
-      planet.potentiallyHabitable = true;
-      return planet;
+      potentiallyHabitable = true;
+      return { ...planet, potentiallyHabitable };
     }
 
-    return planet;
+    return { ...planet, potentiallyHabitable };
   },
 });

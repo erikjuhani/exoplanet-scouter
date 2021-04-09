@@ -2,40 +2,40 @@ export type Combine<T, U> = T & U;
 export type Nullable<T> = T | null;
 
 export type Planet = {
-  name: string;
-  controversial: boolean;
-  yearOfDiscovery: number;
-  updatedAt: string;
-  potentiallyHabitable?: boolean;
-  star: Star;
-  distance?: Nullable<number>;
-  mass?: Nullable<number>;
-  radius?: Nullable<number>;
-  density?: Nullable<number>;
-  orbitalPeriod?: Nullable<number>;
-  orbitSemiMajorAxis?: Nullable<number>;
+  readonly name: string;
+  readonly controversial: boolean;
+  readonly yearOfDiscovery: number;
+  readonly updatedAt: string;
+  readonly potentiallyHabitable?: boolean;
+  readonly star: Star;
+  readonly distance?: Nullable<number>;
+  readonly mass?: Nullable<number>;
+  readonly radius?: Nullable<number>;
+  readonly density?: Nullable<number>;
+  readonly orbitalPeriod?: Nullable<number>;
+  readonly orbitSemiMajorAxis?: Nullable<number>;
 };
 
 export type LatLng = {
-  longitude: number;
-  latitude: number;
+  readonly longitude: number;
+  readonly latitude: number;
 };
 
 export type XYZ = {
-  x: number;
-  y: number;
-  z: number;
+  readonly x: number;
+  readonly y: number;
+  readonly z: number;
 };
 
 export type Star = {
-  name: string;
-  orbitingPlanets: number;
-  coordinates: LatLng | XYZ;
-  mass?: Nullable<number>;
-  age?: Nullable<number>;
-  radius?: Nullable<number>;
-  temperature?: Nullable<number>;
-  distance?: Nullable<number>;
-  hdName?: Nullable<string>;
-  hipName?: Nullable<string>;
+  readonly name: string;
+  readonly orbitingPlanets: number;
+  readonly coordinates: LatLng | XYZ;
+  readonly mass?: Nullable<number>;
+  readonly age?: Nullable<number>;
+  readonly radius?: Nullable<number>;
+  readonly temperature?: Nullable<number>;
+  readonly distance?: Nullable<number>;
+  readonly hdName?: Nullable<string>;
+  readonly hipName?: Nullable<string>;
 };
