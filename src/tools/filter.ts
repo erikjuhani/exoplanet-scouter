@@ -5,42 +5,37 @@ export enum FilterCriteria {
   PotentiallyHabitable = "POTENTIALLY_HABITABLE",
 }
 
-export type Filter = {
-  criteria?: FilterCriteria;
-  negation: 0 | 1;
-  negate: () => Filter;
-  filter: (planet: Planet) => boolean;
+type Filter = {
+  key: keyof Planet;
+  negate: 0 | 1;
 };
 
-export const createFilter = (criteria?: FilterCriteria): Filter => {
-  const filter: Filter = {
-    criteria,
-    negation: 0,
-    negate: () => {
-      filter.negation = filter.negation ? 0 : 1;
-      return filter;
-    },
-    filter: (planet: Planet) => {
-      let key: keyof Planet | undefined = undefined;
+const filterOptionsMap: Record<FilterCriteria, Filter> = {
+  [FilterCriteria.OnlyNonControversial]: { key: "controversial", negate: 1 },
+  [FilterCriteria.PotentiallyHabitable]: {
+    key: "potentiallyHabitable",
+    negate: 0,
+  },
+};
 
-      switch (filter.criteria) {
-        case FilterCriteria.PotentiallyHabitable:
-          key = "potentiallyHabitable";
-          break;
-        case FilterCriteria.OnlyNonControversial:
-          key = "controversial";
-          break;
-      }
-
-      if (key) {
-        return nand(filter.negation, planet[key]);
-      }
-
+export function filter(criteria?: FilterCriteria): (planet: Planet) => boolean {
+  return (planet: Planet): boolean => {
+    if (!criteria) {
       return true;
-    },
-  };
+    }
 
-  return filter;
-};
+    const filter = filterOptionsMap[criteria];
+
+    if (filter) {
+      return nand(filter.negate, planet[filter.key]);
+    }
+
+    return true;
+  };
+}
+
+export const filterByPotentiallyHabitale = filter(
+  FilterCriteria.PotentiallyHabitable
+);
 
 const nand = <T>(a: 0 | 1, b: T): boolean => (a ? !b : !!b);

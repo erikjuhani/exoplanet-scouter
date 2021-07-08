@@ -1,25 +1,23 @@
 import { ExoplanetArchiveAPI } from "./datasource";
-import { tools, Tools } from "./tools";
 
-export type Context = {
+export interface Context {
   dataSources: {
     exoplanetArchiveAPI: ExoplanetArchiveAPI;
   };
-  tools: Tools;
-};
+}
 
-export const createContext = (): ApolloContext => ({
-  dataSources: () => ({ exoplanetArchiveAPI: new ExoplanetArchiveAPI() }),
-  context: {
-    tools,
-  },
-});
+interface DataSources {
+  exoplanetArchiveAPI: ExoplanetArchiveAPI;
+}
 
-type ApolloContext = {
+interface ApolloContext {
   dataSources: () => {
     exoplanetArchiveAPI: ExoplanetArchiveAPI;
   };
-  context: {
-    tools: Tools;
-  };
-};
+}
+
+export const createContext = (): ApolloContext => ({
+  dataSources: (): DataSources => ({
+    exoplanetArchiveAPI: new ExoplanetArchiveAPI(),
+  }),
+});

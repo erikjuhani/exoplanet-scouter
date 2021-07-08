@@ -2,14 +2,21 @@ import { ApolloError } from "apollo-server-errors";
 import { IResolvers } from "graphql-tools";
 import { Context } from "./context";
 import {
+  filter,
+  classifyHabitableZone,
   CoordinateUnit,
   DistanceUnit,
   FilterCriteria,
   SortMethod,
   SortOrder,
   TemperatureUnit,
+  transformResponse,
+  sort,
+  parseParsec,
+  parseKelvins,
+  parseLatLng,
 } from "./tools";
-import { LatLng, Nullable, Planet, Star, XYZ } from "./types";
+import { LatLng, Nullable, Planet, Point, Star, XYZ } from "./types";
 
 const exoplanets = async (
   _source: undefined,
@@ -18,19 +25,19 @@ const exoplanets = async (
     sort?: SortMethod;
     order?: SortOrder;
   },
-  { dataSources, tools }: Context
+  { dataSources }: Context
 ): Promise<Planet[] | undefined> => {
   const { filter: filterArg, sort: sortArg, order: orderArg } = args;
-  const { classifiers, transformers, createFilter, createSort } = tools;
-  const { createResponseTransformer } = transformers;
-  const { createHabitableZoneClassifier } = classifiers;
+
+  const filterWithCriteria = filter(filterArg);
+  const sortWithArgs = sort(sortArg, orderArg);
 
   try {
     return (await dataSources.exoplanetArchiveAPI.fetchPlanets())
-      .map(createResponseTransformer().transform)
-      .map(createHabitableZoneClassifier().evaluate)
-      .filter(createFilter(filterArg).filter)
-      .sort(createSort(sortArg).setOrder(orderArg).sort);
+      .map(transformResponse)
+      .map(classifyHabitableZone)
+      .filter(filterWithCriteria)
+      .sort(sortWithArgs);
   } catch (err) {
     throw new ApolloError(err.message);
   }
@@ -38,14 +45,13 @@ const exoplanets = async (
 
 const distance = (
   source: Planet,
-  args: { unit: DistanceUnit },
-  { tools }: Context
+  args: { unit: DistanceUnit }
 ): Nullable<number | undefined> => {
   const { unit } = args;
-  const { createParsecParser } = tools.parsers;
 
   if (source.distance) {
-    return createParsecParser().setConversionUnit(unit).parse(source.distance);
+    const convertParsecsFrom = parseParsec(unit);
+    return convertParsecsFrom(source.distance);
   }
 
   return source.distance;
@@ -53,33 +59,24 @@ const distance = (
 
 const temperature = (
   source: Star,
-  args: { unit: TemperatureUnit },
-  { tools }: Context
+  args: { unit: TemperatureUnit }
 ): Nullable<number | undefined> => {
   const { unit } = args;
-  const { createKelvinParser } = tools.parsers;
 
   if (source.temperature) {
-    return createKelvinParser()
-      .setConversionUnit(unit)
-      .parse(source.temperature);
+    const convertFromKelvins = parseKelvins(unit);
+    return convertFromKelvins(source.temperature);
   }
 
   return source.temperature;
 };
 
-const coordinates = (
-  source: Star,
-  args: { unit: CoordinateUnit },
-  { tools }: Context
-): LatLng | XYZ => {
+const coordinates = (source: Star, args: { unit: CoordinateUnit }): Point => {
   const { unit } = args;
-  const { createLatLngParser } = tools.parsers;
 
   if (source.distance) {
-    return createLatLngParser()
-      .setConversionUnit(unit)
-      .parse(source.distance, source.coordinates as LatLng);
+    const parseLatLngFromPoint = parseLatLng(unit);
+    return parseLatLngFromPoint(source.distance, source.coordinates);
   }
 
   return source.coordinates;

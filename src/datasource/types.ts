@@ -1,11 +1,11 @@
 import { Nullable } from "../types";
 
-export type Error = {
+export interface Error {
   readonly status: "error";
   readonly msg: string;
-};
+}
 
-export type PlanetJSON = {
+export interface PlanetJSON {
   readonly pl_name: string;
   readonly pl_controv_flag: 0 | 1;
   readonly disc_year: number;
@@ -16,23 +16,25 @@ export type PlanetJSON = {
   readonly pl_orbper: Nullable<number>;
   readonly pl_dens: Nullable<number>;
   readonly rowupdate: Nullable<string>;
-};
+}
 
-export type StarJSON = {
-  readonly hostname: string;
-  readonly st_teff: Nullable<number>;
-  readonly st_mass: Nullable<number>;
-  readonly st_rad: Nullable<number>;
-  readonly st_age: Nullable<number>;
-} & StellarSystem;
-
-export type StellarSystem = {
+export interface StellarSystem {
   readonly sy_snum: number;
   readonly sy_pnum: number;
   readonly sy_dist: number;
   readonly glon: number;
   readonly glat: number;
-};
+}
+
+export interface StarJSON extends StellarSystem {
+  readonly hostname: string;
+  readonly st_teff: Nullable<number>;
+  readonly st_mass: Nullable<number>;
+  readonly st_rad: Nullable<number>;
+  readonly st_age: Nullable<number>;
+}
+
+export type PlanetResponse = PlanetJSON & StarJSON;
 
 export const planetColumns: readonly string[] = Array.from<keyof PlanetJSON>([
   "pl_name",

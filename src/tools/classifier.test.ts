@@ -4,18 +4,9 @@ import {
   tauCetg,
   trappist1d,
 } from "../models/__mocks__/planets";
-import {
-  createHabitableZoneClassifier,
-  HabitableZoneClassifier,
-} from "./classifier";
+import { classifyHabitableZone } from "./classifier";
 
 describe("HabitableZoneClassifier", () => {
-  let classifier: HabitableZoneClassifier | undefined;
-
-  beforeEach(() => {
-    classifier = createHabitableZoneClassifier();
-  });
-
   test.each`
     planet         | expected
     ${proximaCenB} | ${true}
@@ -23,7 +14,7 @@ describe("HabitableZoneClassifier", () => {
     ${gj411b}      | ${false}
     ${tauCetg}     | ${false}
   `("", ({ planet, expected }) => {
-    const actual = classifier?.evaluate(planet);
+    const actual = classifyHabitableZone(planet);
     expect(actual?.potentiallyHabitable).toEqual(expected);
   });
 });

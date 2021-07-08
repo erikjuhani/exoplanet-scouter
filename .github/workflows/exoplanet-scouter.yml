@@ -12,6 +12,11 @@ jobs:
     steps:
           - uses: actions/checkout@v2
 
+          - name: Code validation
+            run: |
+                yarn install
+                yarn test
+
           - name: Build docker image
             run: |
                 docker build --file Dockerfile.prod -t exoscout .

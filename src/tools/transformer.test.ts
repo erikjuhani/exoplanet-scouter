@@ -1,6 +1,6 @@
 import { proximaCenResponse } from "../datasource/__mocks__/response";
 import { proximaCenB } from "../models/__mocks__/planets";
-import { createResponseTransformer } from "./transformer";
+import { transformResponse } from "./transformer";
 
 describe("ResponseTransformer", () => {
   test.each`
@@ -8,6 +8,6 @@ describe("ResponseTransformer", () => {
     ${proximaCenResponse} | ${proximaCenB}
   `("", ({ response, expected }) => {
     delete expected.potentiallyHabitable;
-    expect(createResponseTransformer().transform(response)).toEqual(expected);
+    expect(transformResponse(response)).toEqual(expected);
   });
 });

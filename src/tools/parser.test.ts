@@ -5,11 +5,11 @@ import {
 import { proximaCen } from "../models/__mocks__/planets";
 import {
   CoordinateUnit,
-  createKelvinParser,
-  createLatLngParser,
-  createParsecParser,
   csvStringParse,
   DistanceUnit,
+  parseKelvins,
+  parseLatLng,
+  parseParsec,
   TemperatureUnit,
 } from "./parser";
 
@@ -21,9 +21,7 @@ describe("ParsecParser", () => {
     ${4.8} | ${DistanceUnit.LightYear} | ${15.647999999999998}
     ${8.2} | ${DistanceUnit.Km}        | ${18852586.301836815}
   `("", ({ parsec, unit, expected }) => {
-    expect(createParsecParser().setConversionUnit(unit).parse(parsec)).toEqual(
-      expected
-    );
+    expect(parseParsec(unit)(parsec)).toEqual(expected);
   });
 });
 
@@ -35,9 +33,7 @@ describe("KelvinParser", () => {
     ${273.15} | ${TemperatureUnit.Celsius}    | ${0}
     ${273.15} | ${TemperatureUnit.Fahrenheit} | ${32}
   `("", ({ kelvin, unit, expected }) => {
-    expect(createKelvinParser().setConversionUnit(unit).parse(kelvin)).toEqual(
-      expected
-    );
+    expect(parseKelvins(unit)(kelvin)).toEqual(expected);
   });
 });
 
@@ -48,9 +44,7 @@ describe("LatLngParser", () => {
     ${[proximaCen.distance, proximaCen.coordinates]} | ${CoordinateUnit.LatLng} | ${proximaCen.coordinates}
     ${[proximaCen.distance, proximaCen.coordinates]} | ${CoordinateUnit.XYZ}    | ${{ x: 0.9023895250918642, y: -0.9364154096631991, z: -0.04375776102342627 }}
   `("", ({ args, unit, expected }) => {
-    expect(
-      createLatLngParser().setConversionUnit(unit).parse(args[0], args[1])
-    ).toEqual(expected);
+    expect(parseLatLng(unit)(args[0], args[1])).toEqual(expected);
   });
 });
 

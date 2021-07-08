@@ -27,6 +27,8 @@ export type XYZ = {
   readonly z: number;
 };
 
+export type Point = LatLng | XYZ;
+
 export type Star = {
   readonly name: string;
   readonly orbitingPlanets: number;

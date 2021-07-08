@@ -6,50 +6,37 @@ export enum SortOrder {
 }
 export enum SortMethod {
   Distance = "DISTANCE",
-  Discover = "DISCOVERY",
+  Discovery = "DISCOVERY",
 }
 
-export type Sort = {
-  method?: SortMethod;
-  order: SortOrder;
-  setOrder: (order?: SortOrder) => Sort;
-  sort: (planetA: Planet, planetB: Planet) => number;
+type PlanetValueTypes = Planet[keyof Planet];
+
+type Sort = {
+  key: keyof Planet;
+  transform?: (value: PlanetValueTypes) => number;
 };
 
-export const createSort = (method?: SortMethod): Sort => {
-  const sort: Sort = {
-    method,
-    order: SortOrder.ASC,
-    setOrder: (order?: SortOrder) => {
-      sort.order = order ? order : SortOrder.ASC;
-      return sort;
-    },
-    sort: (planetA: Planet, planetB: Planet): number => {
-      let key: keyof Planet | undefined = undefined;
+const sortOptionsMap: Record<SortMethod, Sort> = {
+  [SortMethod.Distance]: { key: "distance" },
+  [SortMethod.Discovery]: { key: "yearOfDiscovery" },
+};
 
-      switch (sort.method) {
-        case SortMethod.Discover:
-          key = "yearOfDiscovery";
-          break;
-        case SortMethod.Distance:
-          key = "distance";
-          break;
-      }
+export function sort(
+  method?: SortMethod,
+  order = SortOrder.ASC
+): (p0: Planet, p1: Planet) => number {
+  if (!method) {
+    return (): number => 0;
+  }
 
-      if (!key) {
-        return 0;
-      }
+  const { key, transform } = sortOptionsMap[method];
 
-      const valA = planetA[key] || Infinity;
-      const valB = planetB[key] || Infinity;
+  return (p0: Planet, p1: Planet): number => {
+    const val0 = transform ? transform(p0[key]) : p0[key] ?? Infinity;
+    const val1 = transform ? transform(p1[key]) : p1[key] ?? Infinity;
 
-      if (typeof valA !== "number" || typeof valB !== "number") return 0;
+    if (typeof val0 !== "number" || typeof val1 !== "number") return 0;
 
-      if (sort.order === SortOrder.ASC) return valA - valB;
-
-      return valB - valA;
-    },
+    return order === SortOrder.ASC ? val0 - val1 : val1 - val0;
   };
-
-  return sort;
-};
+}

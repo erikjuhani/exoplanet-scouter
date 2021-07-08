@@ -3,14 +3,17 @@ import { createContext } from "./context";
 import { resolvers } from "./resolvers";
 import { typeDefs } from "./schema";
 
-new ApolloServer({
-  typeDefs,
-  resolvers,
-  cacheControl: {
-    // 5 minute cache
-    defaultMaxAge: 300,
-  },
-  ...createContext(),
-})
-  .listen()
-  .then(({ url }) => console.log(`Server running at: ${url}`));
+function main(): void {
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    cacheControl: {
+      defaultMaxAge: 300,
+    },
+    ...createContext(),
+  });
+
+  server.listen().then(({ url }) => console.log(`Server running at: ${url}`));
+}
+
+main();

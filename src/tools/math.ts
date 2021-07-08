@@ -1,3 +1,5 @@
-export const MathUtil = {
-  radians: (deg: number): number => deg * (Math.PI / 180),
-};
+import { halfPI } from "./constants";
+
+export function degToRad(degress: number): number {
+  return degress * halfPI;
+}

@@ -1,5 +1,5 @@
-import { LatLng, XYZ } from "../types";
-import { MathUtil } from "./math";
+import { LatLng, Nullable, Point } from "../types";
+import { degToRad } from "./math";
 
 // TODO: Separate other parse functions from parsers see: csvStringParse().
 // TODO: Use the generic ParserFactory instead, to create Parsers.
@@ -23,152 +23,105 @@ export enum CoordinateUnit {
   XYZ = "XYZ",
 }
 
-export type Parser<T, U, R = undefined> = {
-  conversionUnit: T;
-  setConversionUnit: (unit: T) => Parser<T, U, R>;
-  parse: (
-    ...args: U extends unknown[] ? U : U[]
-  ) => R extends undefined ? U : R;
-};
-
-export type KelvinParser = Parser<TemperatureUnit, number>;
-
-export const createKelvinParser = (
+export function parseKelvins(
   conversionUnit?: TemperatureUnit
-): KelvinParser => {
-  const parser: KelvinParser = {
-    conversionUnit: conversionUnit ? conversionUnit : TemperatureUnit.Kelvin,
-    setConversionUnit: (conversionUnit: TemperatureUnit) => {
-      parser.conversionUnit = conversionUnit;
-      return parser;
-    },
-    parse: (kelvin: number): number => {
-      switch (parser.conversionUnit) {
-        case TemperatureUnit.Celsius:
-          return kelvin - 273.15;
-        case TemperatureUnit.Fahrenheit:
-          return Math.round(kelvin * (9 / 5) - 459.67);
-        default:
-          return kelvin;
-      }
-    },
+): (value: number) => number {
+  return (value: number): number => {
+    switch (conversionUnit) {
+      case TemperatureUnit.Celsius:
+        return value - 273.15;
+      case TemperatureUnit.Fahrenheit:
+        return Math.round(value * (9 / 5) - 459.67);
+      default:
+        // Return the original number value as no conversion unit has been defined.
+        return value;
+    }
   };
+}
 
-  return parser;
-};
-
-export type ParsecParser = Parser<DistanceUnit, number>;
-
-export const createParsecParser = (
+// TODO: generalize and use an object instead of primitive number value.
+// eg. { unit: 'Parsec', value: 1.0 }
+// parseParsec expects number value in parsec format.
+export function parseParsec(
   conversionUnit?: DistanceUnit
-): ParsecParser => {
-  const parser: ParsecParser = {
-    conversionUnit: conversionUnit ? conversionUnit : DistanceUnit.Parsec,
-    setConversionUnit: (conversionUnit: DistanceUnit) => {
-      parser.conversionUnit = conversionUnit;
-      return parser;
-    },
-    parse: (parsec: number): number => {
-      switch (parser.conversionUnit) {
-        case DistanceUnit.Km:
-          return parsec * 3.08567758 ** 13;
-        case DistanceUnit.LightYear:
-          return parsec * 3.26;
-        default:
-          return parsec;
-      }
-    },
+): (value: number) => number {
+  return (value: number): number => {
+    switch (conversionUnit) {
+      case DistanceUnit.Km:
+        return value * 3.08567758 ** 13;
+      case DistanceUnit.LightYear:
+        return value * 3.26;
+      default:
+        return value;
+    }
   };
+}
 
-  return parser;
-};
+function latLngToXYZ(
+  distance: number,
+  latitude: number,
+  longitude: number
+): Point {
+  const latRad = degToRad(latitude);
+  const lngRad = degToRad(longitude);
 
-export type ParseFn<T, R = undefined> = (
-  ...args: T extends unknown[] ? T : T[]
-) => R extends undefined ? T : R;
-
-export type LatLngParser = Parser<
-  CoordinateUnit,
-  [number, LatLng],
-  LatLng | XYZ
->;
-
-export const ParserFactory = <T, U>(defaultUnit: T, parse: ParseFn<U>) => (
-  unit?: T
-): Parser<T, U> => {
-  const parser: Parser<T, U> = {
-    conversionUnit: unit ? unit : defaultUnit,
-    setConversionUnit: (conversionUnit: T) => {
-      parser.conversionUnit = conversionUnit;
-      return parser;
-    },
-    parse,
+  return {
+    x: distance * Math.cos(latRad) * Math.cos(lngRad),
+    y: distance * Math.cos(latRad) * Math.sin(lngRad),
+    z: distance * Math.sin(latRad),
   };
+}
 
-  return parser;
-};
+function isLatLng(point: Point): point is LatLng {
+  const pointAsLatLng = point as LatLng;
+  return (
+    pointAsLatLng.longitude !== undefined &&
+    pointAsLatLng.latitude !== undefined
+  );
+}
 
-export const createLatLngParser = (
+export function parseLatLng(
   conversionUnit?: CoordinateUnit
-): LatLngParser => {
-  const parser: LatLngParser = {
-    conversionUnit: conversionUnit ? conversionUnit : CoordinateUnit.LatLng,
-    setConversionUnit: (conversionUnit: CoordinateUnit) => {
-      parser.conversionUnit = conversionUnit;
-      return parser;
-    },
-    parse: (distance: number, coordinates: LatLng): LatLng | XYZ => {
-      const { latitude, longitude } = coordinates;
+): (distance: number, coordinates: Point) => Point {
+  return (distance: number, coordinates: Point): Point => {
+    if (!isLatLng(coordinates)) {
+      return coordinates;
+    }
 
-      const xyz = (): XYZ => {
-        const latRad = MathUtil.radians(latitude);
-        const lngRad = MathUtil.radians(longitude);
+    const { latitude, longitude } = coordinates;
 
-        return {
-          x: distance * Math.cos(latRad) * Math.cos(lngRad),
-          y: distance * Math.cos(latRad) * Math.sin(lngRad),
-          z: distance * Math.sin(latRad),
-        };
-      };
-
-      switch (parser.conversionUnit) {
-        case CoordinateUnit.XYZ:
-          return xyz();
-        default:
-          return coordinates;
-      }
-    },
+    switch (conversionUnit) {
+      case CoordinateUnit.XYZ:
+        return latLngToXYZ(distance, latitude, longitude);
+      default:
+        return coordinates;
+    }
   };
+}
 
-  return parser;
-};
+function csvFieldParser(value: string): Nullable<string | number> {
+  if (!value.length) {
+    return null;
+  }
 
-export const csvStringParse = <
-  Output extends Record<string, string | number | null>
->(
-  csv: string
+  const numericValue = parseFloat(value);
+  if (isNaN(numericValue)) {
+    // Not a numerical value.
+    // Remove double quotes if present.
+    return value.replace(/"/g, "");
+  }
+
+  return numericValue;
+}
+
+export const csvStringParse = <Output>(
+  csv: string,
+  delimiter = ",",
+  linebreak = "\n"
 ): Output[] => {
-  const delimiter = ",";
-  const linebreak = "\n";
-
-  const parseCellValue = (cellValue: string) => {
-    if (!cellValue.length) {
-      return null;
-    }
-
-    const value = parseFloat(cellValue);
-    if (isNaN(value)) {
-      // Not a numerical value.
-      // Remove double quotes if present.
-      return cellValue.replace(/"/g, "");
-    }
-
-    return value;
-  };
-
   const rawRows = csv.trim().split(linebreak);
   const rows = rawRows.map((rawRow: string) =>
-    rawRow.split(delimiter).map(parseCellValue)
+    rawRow.split(delimiter).map(csvFieldParser)
   );
 
   // Header cell values are always present.

@@ -1,12 +1,8 @@
-import { PlanetJSON, StarJSON } from "../datasource";
-import { Combine, Planet } from "../types";
+import { PlanetResponse } from "../datasource";
+import { Planet } from "../types";
 
-export type ResponseTransformer = {
-  transform: (data: Combine<PlanetJSON, StarJSON>) => Planet;
-};
-
-export const createResponseTransformer = (): ResponseTransformer => ({
-  transform: (data) => ({
+export function transformResponse(data: PlanetResponse): Planet {
+  return {
     name: data.pl_name,
     distance: data.sy_dist,
     mass: data.pl_dens,
@@ -31,5 +27,5 @@ export const createResponseTransformer = (): ResponseTransformer => ({
         latitude: data.glat,
       },
     },
-  }),
-});
+  };
+}
