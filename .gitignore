@@ -1,8 +1,6 @@
 # Logs
 logs
 *.log
-yarn-debug.log*
-yarn-error.log*
 
 # Tests
 coverage
@@ -20,11 +18,17 @@ typings/
 # Optional eslint cache
 .eslintcache
 
-# Yarn Integrity file
-.yarn-integrity
-
 # dotenv environment variables file
 .env
 
 # build directory
 dist
+
+# Yarn
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
